@@ -8,11 +8,12 @@ function RegionSelect() {
   const [regionList, setRegionList] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/regions")
-      .then(res => res.json())
-      .then(setRegionList)
-      .catch(err => console.error("Laadimine ebaõnnestus", err));
+    fetch("/api/regions")
+      .then((res) => res.json())
+      .then((data) => setRegionList(data))
+      .catch((err) => console.error("Laadimine ebaõnnestus", err));
   }, []);
+  
 
   const filtered = regionList.filter((r) =>
     r.name.toLowerCase().includes(query.toLowerCase())
