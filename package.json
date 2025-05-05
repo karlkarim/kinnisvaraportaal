@@ -11,13 +11,15 @@
   },
   "dependencies": {
     "@vercel/postgres": "^0.10.0",
+    "dotenv": "^16.5.0",
     "leaflet": "^1.9.4",
     "pg": "^8.15.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.5.3",
-    "recharts": "^2.15.3"
+    "recharts": "^2.15.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
