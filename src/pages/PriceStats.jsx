@@ -5,7 +5,7 @@ function PriceStats() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/price-stats")
+    fetch("http://localhost:3000/api/price-stats")
       .then((res) => res.json())
       .then((data) => {
         setStats(data);
@@ -16,6 +16,7 @@ function PriceStats() {
         setLoading(false);
       });
   }, []);
+  
 
   if (loading) return <p>Laadin andmeid...</p>;
 
