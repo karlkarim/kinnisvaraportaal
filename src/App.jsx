@@ -3,6 +3,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import RegionOverview from "./pages/RegionOverview";
 import RegionSelect from "./pages/RegionSelect";
+import PriceStats from "./pages/PriceStats";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/piirkond" element={<RegionSelect />} />
           <Route path="/piirkond/:name" element={<RegionOverview />} />
+          <Route path="/hinnad" element={<PriceStats />} />
         </Route>
       </Routes>
     </Router>
