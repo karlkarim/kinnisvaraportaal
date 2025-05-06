@@ -5,50 +5,38 @@ import dotenv from "dotenv";
 dotenv.config();
 const { Pool } = pg;
 
-// PostgreSQL ühendus
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 });
 
-// Laeme Exceli faili ja lehe
+// Laeme Exceli faili
 const workbook = xlsx.readFile("Kinnisvara hinnastatistika (2).xlsx");
 const sheet = workbook.Sheets[workbook.SheetNames[0]];
-const json = xlsx.utils.sheet_to_json(sheet, { range: 4 });
+const json = xlsx.utils.sheet_to_json(sheet, { range: 4 }); // Alustame 5. reast
 
-// Piirkond ja periood
-const rawRegion = String(sheet["A1"]?.v ?? "Tundmatu piirkond");
-const rawPeriod = String(sheet["A2"]?.v ?? "Tundmatu periood");
+// Piirkond tuleb esimesest reast (A1 lahter)
+const region = sheet["A1"]?.v || "Tundmatu piirkond";
+// Periood tuleb teisest reast (A2 lahter)
+const period = sheet["A2"]?.v || "Tundmatu periood";
 
-// Leiame mediaani veeru võtme dünaamiliselt
-let medianField;
+// Kontrollime olemasolevaid võtmeid, et leida mediaanhinna õige veerg
+const medianKey = "Pinnaühiku hind(eur /m2)";
 
-for (const row of json) {
-  for (const key of Object.keys(row)) {
-    const val = parseFloat(row[key]);
-    if (!isNaN(val)) {
-      medianField = key;
-      console.log("🔍 Leitud sobiv veerg:", key);
-      break;
-    }
-  }
-  if (medianField) break;
+
+if (!medianKey) {
+  console.error("❌ Ei leitud sobivat mediaanhinna veergu.");
+  process.exit(1);
 }
 
-
-console.log("🔍 Leitud mediaani veerg:", medianField);
-
-// Sisestatavad andmed
 const inserts = [];
-
 for (const row of json) {
-  const price = parseFloat(row[medianField]);
-  console.log("Toores hind väärtus:", row[medianField]);
-
+  const raw = row[medianKey];
+  const price = parseFloat(raw);
   if (!isNaN(price)) {
     inserts.push({
-      region: rawRegion.trim(),
-      period: rawPeriod.trim(),
+      region: region.trim(),
+      period: period.toString().trim(),
       median_price_per_m2: price,
     });
   }
