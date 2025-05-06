@@ -11,33 +11,32 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-// Exceli fail ja leht
-const workbook = xlsx.readFile("Kinnisvara hinnastatistika.xlsx");
+// Exceli fail
+const workbook = xlsx.readFile("Kinnisvara hinnastatistika (2).xlsx");
 const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const json = xlsx.utils.sheet_to_json(sheet, { range: 4 });
 
-// Võta piirkond ja periood päisest (A1 ja A2)
-const region = String(sheet["A1"]?.v ?? "Tundmatu piirkond");
-const period = String(sheet["A2"]?.v ?? "Tundmatu periood");
+// Piirkond ja periood (A1 ja A2 lahtritest)
+const sheetMeta = workbook.Sheets[workbook.SheetNames[0]];
+const rawRegion = String(sheetMeta["A1"]?.v ?? "Tundmatu piirkond");
+const rawPeriod = String(sheetMeta["A2"]?.v ?? "Tundmatu periood");
 
-
-// Andmete kogumine
+// Õige mediaanhinna veerg
+const medianField = "Pinnaühiku hind(eur /m2).2";
 const inserts = [];
 
 for (const row of json) {
-  console.log("Exceli rida:", row);
-  const price = Object.values(row).find((val) => typeof val === "number");
+  const price = parseFloat(row[medianField]);
 
   if (!isNaN(price)) {
     inserts.push({
-      region: region.trim(),
-      period: period.trim(),
+      region: rawRegion.trim(),
+      period: rawPeriod.trim(),
       median_price_per_m2: price,
     });
   }
 }
 
-// Sisestamine PostgreSQL-i
 const insertData = async () => {
   try {
     for (const r of inserts) {
