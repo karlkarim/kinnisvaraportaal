@@ -11,22 +11,39 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-// Exceli fail
+// Laeme Exceli faili ja lehe
 const workbook = xlsx.readFile("Kinnisvara hinnastatistika (2).xlsx");
 const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const json = xlsx.utils.sheet_to_json(sheet, { range: 4 });
 
-// Piirkond ja periood (A1 ja A2 lahtritest)
-const sheetMeta = workbook.Sheets[workbook.SheetNames[0]];
-const rawRegion = String(sheetMeta["A1"]?.v ?? "Tundmatu piirkond");
-const rawPeriod = String(sheetMeta["A2"]?.v ?? "Tundmatu periood");
+// Piirkond ja periood
+const rawRegion = String(sheet["A1"]?.v ?? "Tundmatu piirkond");
+const rawPeriod = String(sheet["A2"]?.v ?? "Tundmatu periood");
 
-// Õige mediaanhinna veerg
-const medianField = "Pinnaühiku hind(eur /m2).2";
+// Leiame mediaani veeru võtme dünaamiliselt
+let medianField;
+
+for (const row of json) {
+  for (const key of Object.keys(row)) {
+    const val = parseFloat(row[key]);
+    if (!isNaN(val)) {
+      medianField = key;
+      console.log("🔍 Leitud sobiv veerg:", key);
+      break;
+    }
+  }
+  if (medianField) break;
+}
+
+
+console.log("🔍 Leitud mediaani veerg:", medianField);
+
+// Sisestatavad andmed
 const inserts = [];
 
 for (const row of json) {
   const price = parseFloat(row[medianField]);
+  console.log("Toores hind väärtus:", row[medianField]);
 
   if (!isNaN(price)) {
     inserts.push({
@@ -36,6 +53,8 @@ for (const row of json) {
     });
   }
 }
+
+console.log("📦 Sisestatavate ridade arv:", inserts.length);
 
 const insertData = async () => {
   try {
