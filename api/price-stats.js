@@ -1,4 +1,3 @@
-// api/price-stats.js
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -7,12 +6,13 @@ const pool = new Pool({
 });
 
 export default async function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
   try {
-    const result = await pool.query('SELECT * FROM price_stats ORDER BY id DESC LIMIT 100');
+    const result = await pool.query(
+      "SELECT * FROM price_stats ORDER BY period DESC, region ASC, size_group ASC"
+    );
     return res.status(200).json(result.rows);
   } catch (error) {
-    console.error('❌ API viga:', error);
-    return res.status(500).json({ error: 'Andmete laadimine ebaõnnestus' });
+    console.error("❌ API viga:", error);
+    return res.status(500).json({ error: "Andmete laadimine ebaõnnestus" });
   }
 }

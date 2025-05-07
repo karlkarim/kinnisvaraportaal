@@ -1,60 +1,85 @@
-import xlsx from 'xlsx';
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
+import ExcelJS from "exceljs";
+import pg from "pg";
+import dotenv from "dotenv";
 
 dotenv.config();
-
-const workbook = xlsx.readFile('Kinnisvara hinnastatistika (2).xlsx');
-const inserts = [];
+const { Pool } = pg;
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 });
 
-for (const sheetName of workbook.SheetNames) {
-  const worksheet = workbook.Sheets[sheetName];
-  const rows = xlsx.utils.sheet_to_json(worksheet, { defval: null });
+const filePath = "Kinnisvara hinnastatistika (2).xlsx";
 
-  const period = sheetName.trim();
+const parseNum = (val) => {
+  if (typeof val === "number") return val;
+  if (typeof val === "string" && val.trim() !== "***") {
+    const cleaned = val.replace(",", ".").replace(/\s/g, "");
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? null : num;
+  }
+  return null;
+};
 
+const importData = async () => {
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(filePath);
+  const sheet = workbook.worksheets[0];
+
+  let currentPeriod = null;
   let currentRegion = null;
+  let rowCount = 0;
 
-  for (const row of rows) {
-    // Kontrolli võtmeid
-    const regionRaw = row['__EMPTY'];
-    const medianRaw = row['Pinnaühiku hind(eur /m2)_3'];
+  for (let i = 1; i <= sheet.rowCount; i++) {
+    const row = sheet.getRow(i);
+    const [
+      period, region, size_group, transaction_count, avg_area_m2,
+      total_sum_eur, min_price_eur, max_price_eur,
+      min_price_per_m2, max_price_per_m2,
+      median_price_per_m2, avg_price_per_m2, stddev_price_per_m2
+    ] = row.values.slice(1);
 
-    if (regionRaw && typeof regionRaw === 'string') {
-      currentRegion = regionRaw.trim();
-    }
+    if (period) currentPeriod = period;
+    if (region) currentRegion = region;
 
-    if (currentRegion && medianRaw !== null && medianRaw !== '') {
-      const median = parseFloat(medianRaw);
-      if (!isNaN(median)) {
-        inserts.push({ region: currentRegion, period, median });
+    if (currentPeriod && currentRegion && size_group && transaction_count !== undefined) {
+      try {
+        await pool.query(
+          `INSERT INTO price_stats (
+            period, region, size_group, transaction_count, avg_area_m2,
+            total_sum_eur, min_price_eur, max_price_eur,
+            min_price_per_m2, max_price_per_m2,
+            median_price_per_m2, avg_price_per_m2, stddev_price_per_m2
+          ) VALUES (
+            $1, $2, $3, $4, $5,
+            $6, $7, $8,
+            $9, $10,
+            $11, $12, $13
+          )`,
+          [
+            currentPeriod, currentRegion, size_group,
+            parseNum(transaction_count),
+            parseNum(avg_area_m2),
+            parseNum(total_sum_eur),
+            parseNum(min_price_eur),
+            parseNum(max_price_eur),
+            parseNum(min_price_per_m2),
+            parseNum(max_price_per_m2),
+            parseNum(median_price_per_m2),
+            parseNum(avg_price_per_m2),
+            parseNum(stddev_price_per_m2),
+          ]
+        );
+        rowCount++;
+      } catch (error) {
+        console.error(`❌ Viga real ${i} : ${error.message}`);
       }
     }
   }
-}
 
-console.log('📦 Sisestatavate ridade arv:', inserts.length);
+  await pool.end();
+  console.log(`✅ Imporditi ${rowCount} rida.`);
+};
 
-async function insertData() {
-  try {
-    for (const entry of inserts) {
-      console.log(`➡️ Sisestan: ${entry.region} | ${entry.period} | ${entry.median}`);
-      await pool.query(
-        'INSERT INTO price_stats (region, period, median_price_per_m2) VALUES ($1, $2, $3)',
-        [entry.region, entry.period, entry.median]
-      );
-    }
-    console.log('✅ Andmed edukalt sisestatud.');
-  } catch (error) {
-    console.error('❌ Viga sisestamisel:', error);
-  } finally {
-    await pool.end();
-  }
-}
-
-insertData();
+importData();
