@@ -53,6 +53,31 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Kuidas see portaal aitab erinevaid kasutajaid */}
+      <section className="px-6 py-24 max-w-6xl mx-auto bg-white">
+        <h2 className="text-3xl font-bold text-neutral-900 mb-12 text-center">Kuidas see portaal aitab?</h2>
+        <div className="grid md:grid-cols-3 gap-10 text-center">
+          <div className="bg-[#f1f5f9] rounded-2xl p-6 shadow-sm">
+            <h3 className="text-xl font-semibold mb-2 text-neutral-800">Koduostja</h3>
+            <p className="text-neutral-700 text-sm">
+              Võrdle piirkondade hinnataset ja vali sobiv kodu hinna ja kvaliteedi suhte järgi.
+            </p>
+          </div>
+          <div className="bg-[#f1f5f9] rounded-2xl p-6 shadow-sm">
+            <h3 className="text-xl font-semibold mb-2 text-neutral-800">Investor</h3>
+            <p className="text-neutral-700 text-sm">
+              Tuvasta piirkonnad, kus on kiire hinnakasv või stabiilne tootluspotentsiaal.
+            </p>
+          </div>
+          <div className="bg-[#f1f5f9] rounded-2xl p-6 shadow-sm">
+            <h3 className="text-xl font-semibold mb-2 text-neutral-800">Arendaja</h3>
+            <p className="text-neutral-700 text-sm">
+              Saa ülevaade piirkondade hoonestusest, ehitusaastatest ja kinnisvaratüüpide osakaalust.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="px-6 py-24 max-w-4xl mx-auto space-y-8">
         <h2 className="text-3xl font-bold text-neutral-900">Unikaalne tööriist</h2>
         <p className="text-neutral-700 text-lg">
