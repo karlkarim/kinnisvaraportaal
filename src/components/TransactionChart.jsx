@@ -1,16 +1,24 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+// src/components/TransactionChart.jsx
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-function TransactionChart({ data }) {
+function TransactionChart({ data, region }) {
+  if (!data?.length) return <p>Tehinguandmeid ei leitud.</p>;
+
   return (
-    <div style={{ width: '100%', height: 300 }}>
-      <ResponsiveContainer>
-        <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="quarter" />
+    <div className="mt-10">
+      <h2 className="text-xl font-semibold mb-2">Tehingute arv – {region}</h2>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data}>
+          <XAxis dataKey="period" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="count" fill="#82ca9d" />
-        </BarChart>
+          <Line
+            type="monotone"
+            dataKey="transaction_count"
+            stroke="#f97316"
+            dot
+          />
+        </LineChart>
       </ResponsiveContainer>
     </div>
   );

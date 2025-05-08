@@ -1,56 +1,57 @@
+// src/pages/RegionSelect.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import regionList from "../data/regionList";
 
 function RegionSelect() {
+  const [regions, setRegions] = useState([]);
   const [query, setQuery] = useState("");
+  const [filtered, setFiltered] = useState([]);
   const navigate = useNavigate();
-  const [regionList, setRegionList] = useState([]);
 
   useEffect(() => {
     fetch("/api/regions")
       .then((res) => res.json())
-      .then((data) => setRegionList(data))
-      .catch((err) => console.error("Laadimine ebaõnnestus", err));
+      .then((data) => setRegions(data))
+      .catch((err) =>
+        console.error("Piirkondade laadimine ebaõnnestus:", err)
+      );
   }, []);
-  
 
-  const filtered = regionList.filter((r) =>
-    r.name.toLowerCase().includes(query.toLowerCase())
-  );
-
-  const handleSelect = (name) => {
-    navigate(`/piirkond/${name}`);
-  };
+  useEffect(() => {
+    if (query.length >= 3) {
+      const q = query.toLowerCase();
+      const matches = regions.filter((region) =>
+        region.name.toLowerCase().includes(q)
+      );
+      setFiltered(matches);
+    } else {
+      setFiltered([]);
+    }
+  }, [query, regions]);
 
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
-      <h1 className="text-2xl font-semibold mb-4 text-center">Otsi piirkonda</h1>
-
+    <div className="max-w-xl mx-auto mt-12 bg-white p-6 rounded shadow">
+      <h1 className="text-xl font-semibold mb-4 text-center">Otsi piirkonda</h1>
       <input
         type="text"
-        placeholder="Sisesta piirkonna nimi..."
+        placeholder="Sisesta piirkonna nimi…"
+        className="w-full p-2 border rounded mb-4"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="w-full p-2 border border-gray-300 rounded mb-4"
       />
-
-      <ul className="space-y-2">
-        {filtered.length > 0 ? (
-          filtered.map((r) => (
-            <li key={r.name}>
-              <button
-                onClick={() => handleSelect(r.name)}
-                className="w-full text-left p-2 bg-blue-50 hover:bg-blue-100 rounded"
-              >
-                {r.name}
-              </button>
-            </li>
-          ))
-        ) : (
-          <li className="text-gray-500">Tulemusi ei leitud</li>
-        )}
-      </ul>
+      <div>
+        {filtered.map((region) => (
+          <div
+            key={region.name}
+            onClick={() =>
+              navigate(`/piirkond/${encodeURIComponent(region.name)}`)
+            }
+            className="p-2 cursor-pointer hover:bg-blue-100 rounded"
+          >
+            {region.name}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

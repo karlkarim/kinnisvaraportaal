@@ -28,6 +28,9 @@ function Layout() {
             <Link to="/piirkond" className={navLinkClass("/piirkond")}>
               Piirkonna ülevaade
             </Link>
+            <Link to="/hinnagraafik" className={navLinkClass("/hinnagraafik")}>
+            Hinnagraafik</Link>
+
           </nav>
         </div>
       </header>

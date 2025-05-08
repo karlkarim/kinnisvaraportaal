@@ -1,81 +1,49 @@
 import { useEffect, useState } from "react";
-import {
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-function PriceChart() {
-  const [allStats, setAllStats] = useState([]);
-  const [selectedRegion, setSelectedRegion] = useState("");
-  const [chartData, setChartData] = useState([]);
-
-  useEffect(() => {
-    fetch("/api/price-stats")
-      .then((res) => res.json())
-      .then((data) => {
-        setAllStats(data);
-        const uniqueRegions = [...new Set(data.map((item) => item.region))];
-        setSelectedRegion(uniqueRegions[0]);
-      });
-  }, []);
+function PriceChart({ selectedRegion }) {
+  const [stats, setStats] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!selectedRegion) return;
 
-    const filtered = allStats
-      .filter((item) => item.region === selectedRegion)
-      .map((item) => ({
-        period: item.period,
-        median: item.median_price_per_m2,
-      }))
-      .sort((a, b) => a.period.localeCompare(b.period));
+    fetch(`/api/price-stats-chart?region=${encodeURIComponent(selectedRegion)}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Server vastas veaga");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("Vigane vastuse formaat");
+        }
+        setStats(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Graafiku laadimine ebaõnnestus:", err);
+        setStats([]);
+        setLoading(false);
+      });
+  }, [selectedRegion]);
 
-    setChartData(filtered);
-  }, [selectedRegion, allStats]);
+  if (loading) return <p>Laadin graafikut...</p>;
+  if (!stats.length) return <p>Andmeid ei leitud.</p>;
 
   return (
-    <div className="max-w-5xl mx-auto p-4">
-      <div className="mb-4">
-        <label htmlFor="region" className="mr-2 font-semibold">
-          Vali piirkond:
-        </label>
-        <select
-          id="region"
-          value={selectedRegion}
-          onChange={(e) => setSelectedRegion(e.target.value)}
-          className="border px-2 py-1 rounded"
-        >
-          {[...new Set(allStats.map((item) => item.region))].map((region) => (
-            <option key={region} value={region}>
-              {region}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {chartData.length > 0 ? (
-        <>
-          <h2 className="text-xl font-semibold mb-2">
-            Mediaanhinna muutus: {selectedRegion}
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData}>
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="period" />
-              <YAxis unit=" €" />
-              <Tooltip />
-              <Line type="monotone" dataKey="median" stroke="#3b82f6" />
-            </LineChart>
-          </ResponsiveContainer>
-        </>
-      ) : (
-        <p>Andmeid ei leitud valitud piirkonna kohta.</p>
-      )}
+    <div className="mt-8">
+      <h2 className="text-xl font-semibold mb-2">Hinnagraafik – {selectedRegion}</h2>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={stats}>
+          <XAxis dataKey="period" />
+          <YAxis />
+          <Tooltip />
+          <Line type="monotone" dataKey="median_price_per_m2" stroke="#8884d8" dot />
+          <Line type="monotone" dataKey="avg_price_per_m2" stroke="#82ca9d" dot />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }

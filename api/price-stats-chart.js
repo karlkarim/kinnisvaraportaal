@@ -1,4 +1,4 @@
-// /api/price-stats.js
+// /api/price-stats-chart.js
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -7,7 +7,7 @@ const pool = new Pool({
 });
 
 export default async function handler(req, res) {
-  const region = req.query.region;
+  const { region } = req.query;
 
   if (!region) {
     return res.status(400).json({ error: "Missing region parameter" });
@@ -18,6 +18,7 @@ export default async function handler(req, res) {
       `SELECT 
          period,
          region,
+         SUM(transaction_count) AS transaction_count,
          ROUND(AVG(median_price_per_m2)::numeric, 0) AS median_price_per_m2,
          ROUND(AVG(avg_price_per_m2)::numeric, 0) AS avg_price_per_m2
        FROM price_stats
@@ -28,8 +29,8 @@ export default async function handler(req, res) {
     );
 
     res.status(200).json(result.rows);
-  } catch (error) {
-    console.error("❌ Viga hinnastatistika päringul:", error);
-    res.status(500).json({ error: "Serveri viga" });
+  } catch (err) {
+    console.error("❌ Error in price-stats-chart API:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 }

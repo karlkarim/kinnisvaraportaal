@@ -1,9 +1,11 @@
+// App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import RegionOverview from "./pages/RegionOverview";
 import RegionSelect from "./pages/RegionSelect";
 import PriceStats from "./pages/PriceStats";
+import PriceChartPage from "./pages/PriceChartPage"; // ✅ uus
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
           <Route path="/piirkond" element={<RegionSelect />} />
           <Route path="/piirkond/:name" element={<RegionOverview />} />
           <Route path="/hinnad" element={<PriceStats />} />
+          <Route path="/hinnagraafik" element={<PriceChartPage />} /> {/* ✅ uus */}
         </Route>
       </Routes>
     </Router>
