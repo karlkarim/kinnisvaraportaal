@@ -15,7 +15,10 @@ function MapCenterUpdater({ center }) {
 }
 
 function MapView({ regionName }) {
-  const region = geoRegions.find(r => r.name === regionName);
+  const region = geoRegions.find(r =>
+    regionName.toLowerCase().includes(r.name.toLowerCase())
+  );
+  
 
   if (!region) {
     return <p>Kaardiandmed puuduvad piirkonna "{regionName}" kohta.</p>;

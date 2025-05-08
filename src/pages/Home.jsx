@@ -3,92 +3,79 @@ import { motion } from "framer-motion";
 
 export default function Home() {
   return (
-    <div className="p-4 max-w-5xl mx-auto space-y-16">
+    <div className="bg-white text-[17px] md:text-[18px] font-sans">
       {/* Hero Section */}
-      <motion.section
-        className="grid md:grid-cols-2 items-center gap-10"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">Kinnisvaraportaal</h1>
-          <p className="text-gray-700 text-lg mb-6">
-            Kinnisvaraportaal pakub võimaluse kiiresti ja mugavalt süvendada arusaama kinnisvara hindade trendidest erinevates piirkondades.
+      <section className="px-6 py-28 max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
+        <div className="lg:col-span-6 space-y-6 text-left">
+          <h1 className="text-5xl font-extrabold leading-tight tracking-tight text-neutral-900">Kinnisvaraportaal</h1>
+          <p className="text-neutral-700 text-lg max-w-xl">
+            Kasuta andmeid, mitte oletusi. Saa ülevaade kinnisvarahindade dünaamikast piirkondade lõikes ning tee teadlikke otsuseid.
           </p>
           <Link
             to="/piirkond"
-            className="inline-block bg-blue-600 text-white py-2 px-6 rounded-full text-lg hover:bg-blue-700 transition animate-pulse"
+            className="inline-block bg-teal-600 text-white py-3 px-7 rounded-2xl text-lg font-semibold hover:bg-teal-700 transition"
           >
             Alusta piirkonna vaatamist
           </Link>
         </div>
-        <div>
+        <div className="lg:col-span-6">
           <img
             src="/illustratsioonid/piirkondade-vordlus.png"
             alt="Statistika visualiseerimine"
-            className="w-full max-w-md mx-auto"
+            className="w-full max-w-md mx-auto rounded-2xl"
           />
         </div>
-      </motion.section>
+      </section>
 
       {/* Info blocks */}
-      <motion.section
-        className="grid md:grid-cols-2 gap-10"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Miks see on kasulik?</h2>
-          <p className="text-gray-700 mb-4">
-            Kinnisvaraportaal võimaldab lihtsalt mõista kinnisvara hinnadünaamikat ja trende Eesti piirkondades.
-          </p>
-          <img src="/illustratsioonid/kaart-analuus.png" alt="Graafik kaardil" className="w-full max-w-sm mx-auto" />
-        </div>
+      <section className="bg-[#eef2f6] px-6 py-24">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold text-neutral-900">Miks see on kasulik?</h2>
+            <p className="text-neutral-700 text-lg">
+              Portaal aitab mõista kinnisvara hinnadünaamikat ja trende Eesti piirkondades: koduotsijatele, investoritele ja arendajatele.
+            </p>
+            <img
+              src="/illustratsioonid/kaart-analuus.png"
+              alt="Graafik kaardil"
+              className="w-full max-w-sm rounded-2xl"
+            />
+          </div>
 
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Kuidas see toimib?</h2>
-          <ul className="list-disc ml-5 space-y-2 text-gray-700">
-            <li>Sisesta piirkonna nimi</li>
-            <li>Leia tehingute ajalugu ja hinnastatistika</li>
-            <li>Vaata graafikuid ja võrdlusi</li>
-          </ul>
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold text-neutral-900">Kuidas see toimib?</h2>
+            <ul className="list-disc pl-6 space-y-2 text-neutral-700 text-lg">
+              <li>Otsi piirkonda nime järgi</li>
+              <li>Vaata mediaanhindu ja tehinguarvu</li>
+              <li>Analüüsi graafikuid ja trende</li>
+            </ul>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <h2 className="text-xl font-semibold mb-2">Unikaalne tööriist</h2>
-        <p className="text-gray-700 mb-4">
-          Meie portaaliga saad ülilihtsalt ja kiirelt ülevaate hindade dünaamikast Eestis. Suunatud koduostjale, turu jälgijale ja investorile, andes kasulikke teadmisi hetkega.
+      <section className="px-6 py-24 max-w-4xl mx-auto space-y-8">
+        <h2 className="text-3xl font-bold text-neutral-900">Unikaalne tööriist</h2>
+        <p className="text-neutral-700 text-lg">
+          Meie portaal ei kuva kuulutusi – ainult usaldusväärset statistikat. Ülevaade viimaste kvartalite hindadest, piirkondade võrdlus ja hoonestusprofiilid.
         </p>
         <Link
           to="/piirkond"
-          className="inline-block bg-blue-600 text-white py-2 px-6 rounded-full text-lg hover:bg-blue-700 transition"
+          className="inline-block bg-teal-600 text-white py-3 px-7 rounded-2xl text-lg font-semibold hover:bg-teal-700 transition"
         >
           Vaata piirkondi
         </Link>
-      </motion.section>
+      </section>
 
-      <motion.section
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <h2 className="text-xl font-semibold mb-2">Kellele see portaal on mõeldud?</h2>
-        <ul className="list-disc ml-5 space-y-2 text-gray-700">
-          <li><strong>Koduostjale:</strong> saad teada, milline piirkond on hinnalt ja kvaliteedilt sobivaim.</li>
-          <li><strong>Investorile:</strong> hindade kasv, aktiivsus ja trendid aitavad teha kasumlikke otsuseid.</li>
-          <li><strong>Arendajale:</strong> näed piirkonna hoonestusprofiili, ehitusaastaid ja turuaktiivsust.</li>
-        </ul>
-      </motion.section>
+      <section className="bg-[#eef2f6] px-6 py-24">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-neutral-900 mb-6">Kellele see portaal on mõeldud?</h2>
+          <ul className="list-disc pl-6 space-y-4 text-neutral-700 text-lg">
+            <li><strong>Koduostjale:</strong> saad teada, milline piirkond on hinnalt ja kvaliteedilt sobivaim.</li>
+            <li><strong>Investorile:</strong> hindade kasv, aktiivsus ja trendid aitavad teha kasumlikke otsuseid.</li>
+            <li><strong>Arendajale:</strong> näed piirkonna hoonestusprofiili, ehitusaastaid ja turuaktiivsust.</li>
+          </ul>
+        </div>
+      </section>
     </div>
   );
 }

@@ -53,7 +53,8 @@ function RegionOverview() {
       </p>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Asukoht kaardil</h2>
-      <MapView regionName={details.region} geojson={details.geojson} />
+      <MapView regionName={details.region} />
+      
 
      
       <PriceChart data={chartStats} selectedRegion={details.region} />
