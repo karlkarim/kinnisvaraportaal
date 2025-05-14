@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-function PriceChart({ selectedRegion }) {
+const keyMap = {
+  median_price_per_m2: "Mediaanhind €/m²",
+  avg_price_per_m2: "Keskmine hind €/m²"
+};
+
+function PriceChart({ selectedRegion, year, months }) {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!selectedRegion) return;
-
-    fetch(`/api/price-stats-chart?region=${encodeURIComponent(selectedRegion)}`)
+    const params = new URLSearchParams();
+    if (year) params.set("aasta", year);
+    if (months && months.length) params.set("kuud", months.join(","));
+    fetch(`/api/price-stats-chart?region=${encodeURIComponent(selectedRegion)}&${params.toString()}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Server vastas veaga");
@@ -27,7 +34,7 @@ function PriceChart({ selectedRegion }) {
         setStats([]);
         setLoading(false);
       });
-  }, [selectedRegion]);
+  }, [selectedRegion, year, months]);
 
   if (loading) return <p>Laadin graafikut...</p>;
   if (!stats.length) return <p>Andmeid ei leitud.</p>;
@@ -39,7 +46,10 @@ function PriceChart({ selectedRegion }) {
         <LineChart data={stats}>
           <XAxis dataKey="period" />
           <YAxis />
-          <Tooltip />
+          <Tooltip 
+            formatter={(value, name) => [value, keyMap[name] || name]}
+            labelFormatter={label => label.replace("-", ".")}
+          />
           <Line type="monotone" dataKey="median_price_per_m2" stroke="#8884d8" dot />
           <Line type="monotone" dataKey="avg_price_per_m2" stroke="#82ca9d" dot />
         </LineChart>
