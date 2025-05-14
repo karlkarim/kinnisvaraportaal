@@ -5,6 +5,7 @@ import { FaArrowLeft, FaChartLine, FaMapMarkerAlt, FaBuilding, FaEuroSign, FaHom
 import MapView from "../components/MapView";
 import PriceChart from "../components/PriceChart";
 import TransactionChart from "../components/TransactionChart";
+import BuildingStats from "../components/BuildingStats";
 import RegionSelect from "./RegionSelect";
 
 const allMonths = [
@@ -252,6 +253,22 @@ function RegionOverview() {
               <p className="text-neutral-600">Keskmine hoonestustihedus: {details.avg_area_m2} m²</p>
             </div>
           </div>
+        </motion.div>
+
+        {/* Building Stats Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9 }}
+          className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+        >
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+            <div className="bg-teal-100 p-2 rounded-lg">
+              <FaBuilding className="text-teal-600" />
+            </div>
+            Hoonestuse statistika
+          </h2>
+          <BuildingStats region={details.region} />
         </motion.div>
       </motion.div>
     </div>

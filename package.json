@@ -1,22 +1,32 @@
 {
   "name": "kinnisvaraportaal",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Kinnisvaraportaal",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "generate-test-data": "node generate_test_data.js",
+    "import-test-data": "node import_test_data.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "@vercel/postgres": "^0.10.0",
-    "csv-parse": "^5.6.0",
-    "dotenv": "^16.5.0",
+    "csv-parse": "^5.5.3",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
     "exceljs": "^4.4.0",
     "framer-motion": "^12.10.4",
     "leaflet": "^1.9.4",
-    "pg": "^8.15.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
@@ -38,6 +48,7 @@
     "globals": "^16.0.0",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2",
-    "vite": "^6.3.1"
+    "vite": "^6.3.1",
+    "nodemon": "^3.0.3"
   }
 }
