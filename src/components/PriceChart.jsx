@@ -6,6 +6,11 @@ const keyMap = {
   avg_price_per_m2: "Keskmine hind €/m²"
 };
 
+const monthNames = [
+  "Jaanuar", "Veebruar", "Märts", "Aprill", "Mai", "Juuni",
+  "Juuli", "August", "September", "Oktoober", "November", "Detsember"
+];
+
 function PriceChart({ selectedRegion, year, months }) {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,9 +47,22 @@ function PriceChart({ selectedRegion, year, months }) {
   return (
     <div className="mt-8">
       <h2 className="text-xl font-semibold mb-2">Hinnagraafik – {selectedRegion}</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={stats}>
-          <XAxis dataKey="period" />
+      <ResponsiveContainer width="100%" height={350}>
+        <LineChart data={stats} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+          <XAxis
+            dataKey="period"
+            interval={0}
+            tick={({ x, y, payload }) => {
+              const [year, month] = payload.value.split("-");
+              return (
+                <g transform={`translate(${x},${y + 10})`}>
+                  <text x={0} y={0} textAnchor="end" fontSize={14} transform="rotate(-35)">
+                    {monthNames[parseInt(month, 10) - 1]} {year}
+                  </text>
+                </g>
+              );
+            }}
+          />
           <YAxis />
           <Tooltip 
             formatter={(value, name) => [value, keyMap[name] || name]}

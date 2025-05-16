@@ -256,6 +256,7 @@ function RegionOverview() {
         </motion.div>
 
         {/* Building Stats Section */}
+        {/*
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -270,6 +271,7 @@ function RegionOverview() {
           </h2>
           <BuildingStats region={details.region} />
         </motion.div>
+        */}
       </motion.div>
     </div>
   );
