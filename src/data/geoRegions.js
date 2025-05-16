@@ -551,7 +551,20 @@ const geoRegions = [
       59.02466459452968,
       26.288783165598577
     ]
+  },
+  {
+    "name": "Mustamäe linnaosa",
+    "center": [59.4058, 24.6975]
+  },
+  {
+    "name": "Nõmme linnaosa",
+    "center": [59.3825, 24.6784]
+  },
+  {
+    "name": "Lasnamäe linnaosa",
+    "center": [59.4264, 24.8308]
   }
+  // ...jne kõik Tallinna linnaosad
 ] 
 
 export default geoRegions;
