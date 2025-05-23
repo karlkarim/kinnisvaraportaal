@@ -1,4 +1,3 @@
-import express from 'express';
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -6,9 +5,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-const router = express.Router();
-
-router.get('/building-stats', async (req, res) => {
+export default async function handler(req, res) {
   try {
     const { region } = req.query;
 
@@ -64,6 +61,4 @@ router.get('/building-stats', async (req, res) => {
     console.error('Viga hoonestuse statistika pärimisel:', error);
     res.status(500).json({ error: 'Serveri viga' });
   }
-});
-
-export default router; 
+} 
