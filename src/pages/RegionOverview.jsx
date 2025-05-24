@@ -7,6 +7,8 @@ import PriceChart from "../components/PriceChart";
 import TransactionChart from "../components/TransactionChart";
 import BuildingStats from "../components/BuildingStats";
 import RegionSelect from "./RegionSelect";
+import RegionPriceVsHPIChart from "../components/RegionPriceVsHPIChart";
+import ConstructionIndexChart from "../components/ConstructionIndexChart";
 
 const allMonths = [
   "Jaanuar", "Veebruar", "Märts", "Aprill", "Mai", "Juuni",
@@ -175,12 +177,12 @@ function RegionOverview() {
 
         {/* Map and Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {/* Map */}
+          {/* Asukoht kaardil - täislaiuses */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 col-span-1 lg:col-span-2"
           >
             <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
               <div className="bg-teal-100 p-2 rounded-lg">
@@ -193,7 +195,7 @@ function RegionOverview() {
             </div>
           </motion.div>
 
-          {/* Price Chart */}
+          {/* Hinnadünaamika */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -210,13 +212,41 @@ function RegionOverview() {
               <PriceChart selectedRegion={details.region} year={year} months={months} />
             </div>
           </motion.div>
+
+          {/* Mediaanhind vs HPI */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+          >
+            <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+              <div className="bg-teal-100 p-2 rounded-lg">
+                <FaChartBar className="text-teal-600" />
+              </div>
+              {details.region} mediaanhind vs HPI
+            </h2>
+            <div className="h-[300px] sm:h-[400px]">
+              <RegionPriceVsHPIChart region={details.region} />
+            </div>
+          </motion.div>
         </div>
+
+        {/* Ehitushinnaindeksi trend */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+        >
+          <ConstructionIndexChart />
+        </motion.div>
 
         {/* Transaction Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.9 }}
           className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
         >
           <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
@@ -234,7 +264,7 @@ function RegionOverview() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 1.0 }}
           className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
         >
           <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
