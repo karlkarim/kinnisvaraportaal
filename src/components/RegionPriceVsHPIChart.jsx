@@ -17,7 +17,7 @@ const monthNamesShort = [
 
 const ChartWrapper = ({ children }) => (
   <div className="overflow-x-auto">
-    <div className="min-w-[640px]">{children}</div>
+    <div className="w-full sm:min-w-[640px]">{children}</div>
   </div>
 );
 

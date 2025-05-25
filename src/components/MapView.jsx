@@ -14,7 +14,7 @@ function MapCenterUpdater({ center }) {
   return null;
 }
 
-function MapView({ regionName }) {
+function MapView({ regionName, heightClass = "h-56" }) {
   const region = geoRegions.find(r =>
     regionName.toLowerCase().includes(r.name.toLowerCase())
   );
@@ -27,7 +27,7 @@ function MapView({ regionName }) {
   const center = region.center;
 
   return (
-    <div className="h-96 rounded overflow-hidden">
+    <div className={`${heightClass} rounded overflow-hidden`}>
       <MapContainer center={center} zoom={13} scrollWheelZoom={false} style={{ height: "100%", width: "100%", zIndex: 0 }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

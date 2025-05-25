@@ -7,10 +7,10 @@ const ChartModalWrapper = ({ title, children }) => {
   return (
     <>
       {/* Klikitav eelvaade ainult mobiilis */}
-      <div className="sm:hidden cursor-pointer" onClick={() => setIsOpen(true)}>
-        <div className="h-[180px] rounded-lg border p-2 bg-white shadow">
-          <p className="text-sm text-center text-neutral-600">{title}</p>
-          <div className="h-[120px] overflow-hidden opacity-40 pointer-events-none">
+      <div className="sm:hidden cursor-pointer mb-4" onClick={() => setIsOpen(true)}>
+        <div className="w-full h-[200px]">
+          <p className="text-base font-semibold text-center text-neutral-800 mb-2 truncate">{title}</p>
+          <div className="w-full h-[150px]">
             {children}
           </div>
         </div>

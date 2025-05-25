@@ -24,6 +24,7 @@ function RegionOverview() {
   const [loading, setLoading] = useState(true);
   const [chartStats, setChartStats] = useState([]);
   const [transactionStats, setTransactionStats] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   // Loen query parameetrid
   const params = new URLSearchParams(location.search);
@@ -193,20 +194,28 @@ function RegionOverview() {
               Asukoht kaardil
             </h2>
             <div className="h-[220px] xs:h-[320px] sm:h-[400px] w-full">
-              <MapView regionName={details.region} />
+              <MapView regionName={details.region} heightClass="h-56" />
             </div>
           </motion.div>
+
+          {/* spacing ainult mobiilis */}
+          <div className="sm:hidden h-6"></div>
 
           {/* Hinnadünaamika */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
+            className="w-full"
           >
-            <ChartModalWrapper title={`Hinnagraafik – ${details.region}`}>
+            <div className="w-screen -mx-4 sm:hidden mb-6">
               <PriceChart selectedRegion={details.region} year={year} months={months} />
-            </ChartModalWrapper>
+            </div>
+            <div className="hidden sm:block sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-lg sm:hover:shadow-xl sm:transition-all sm:duration-300 sm:border sm:border-gray-100">
+              <ChartModalWrapper title={`Hinnagraafik – ${details.region}`}>
+                <PriceChart selectedRegion={details.region} year={year} months={months} />
+              </ChartModalWrapper>
+            </div>
           </motion.div>
 
           {/* Mediaanhind vs HPI */}
@@ -214,11 +223,16 @@ function RegionOverview() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
+            className="w-full"
           >
-            <ChartModalWrapper title={`${details.region} mediaanhind vs HPI`}>
+            <div className="w-screen -mx-4 sm:hidden mb-6">
               <RegionPriceVsHPIChart region={details.region} />
-            </ChartModalWrapper>
+            </div>
+            <div className="hidden sm:block sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-lg sm:hover:shadow-xl sm:transition-all sm:duration-300 sm:border sm:border-gray-100">
+              <ChartModalWrapper title={`${details.region} mediaanhind vs HPI`}>
+                <RegionPriceVsHPIChart region={details.region} />
+              </ChartModalWrapper>
+            </div>
           </motion.div>
         </div>
 
@@ -227,11 +241,16 @@ function RegionOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
+          className="w-full"
         >
-          <ChartModalWrapper title="Tehingute statistika">
+          <div className="w-screen -mx-4 sm:hidden mb-6">
             <TransactionChart data={transactionStats} region={details.region} />
-          </ChartModalWrapper>
+          </div>
+          <div className="hidden sm:block sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-lg sm:hover:shadow-xl sm:transition-all sm:duration-300 sm:border sm:border-gray-100">
+            <ChartModalWrapper title="Tehingute statistika">
+              <TransactionChart data={transactionStats} region={details.region} />
+            </ChartModalWrapper>
+          </div>
         </motion.div>
 
         {/* Ehitushinnaindeksi trend */}
@@ -239,11 +258,16 @@ function RegionOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9 }}
-          className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
+          className="w-full"
         >
-          <ChartModalWrapper title="Ehitushinnaindeksi trend">
+          <div className="w-screen -mx-4 sm:hidden mb-6">
             <ConstructionIndexChart />
-          </ChartModalWrapper>
+          </div>
+          <div className="hidden sm:block sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-lg sm:hover:shadow-xl sm:transition-all sm:duration-300 sm:border sm:border-gray-100">
+            <ChartModalWrapper title="Ehitushinnaindeksi trend">
+              <ConstructionIndexChart />
+            </ChartModalWrapper>
+          </div>
         </motion.div>
 
         {/* Additional Info Section */}
