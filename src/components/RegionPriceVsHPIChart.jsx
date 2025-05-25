@@ -69,37 +69,41 @@ const RegionPriceVsHPIChart = ({ region }) => {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <LineChart data={regionData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-        <XAxis
-          dataKey="period"
-          interval={window.innerWidth < 640 ? 2 : 0}
-          tick={({ x, y, payload }) => {
-            return (
-              <g transform={`translate(${x},${y + 10})`}>
-                <text
-                  x={0}
-                  y={0}
-                  textAnchor="end"
-                  fontSize={window.innerWidth < 640 ? 10 : 12}
-                  transform="rotate(-25)"
-                >
-                  {formatXAxis(payload.value)}
-                </text>
-              </g>
-            );
-          }}
-        />
-        <YAxis />
-        <Tooltip
-          formatter={(value, name) => [formatEur(value, name === "regionPrice"), name === "regionPrice" ? `${region} mediaanhind €/m²` : "Eesti HPI"]}
-          labelFormatter={formatTooltipLabel}
-        />
-        <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: window.innerWidth < 640 ? 12 : 14 }} />
-        <Line type="monotone" dataKey="regionPrice" name={`${region} mediaanhind €/m²`} stroke="#1e3a8a" dot />
-        <Line type="monotone" dataKey="hpi" name="Eesti HPI" stroke="#16a34a" dot />
-      </LineChart>
-    </ResponsiveContainer>
+    <div>
+      <h2 className="text-xl font-semibold mb-1">{region} mediaanhind vs HPI</h2>
+      <p className="text-sm text-neutral-600 mb-2">Valitud piirkonna mediaanhinna ja Eesti eluaseme hinnaindeksi (HPI, 2010=100) võrdlus ajas.</p>
+      <ResponsiveContainer width="100%" height={400}>
+        <LineChart data={regionData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+          <XAxis
+            dataKey="period"
+            interval={window.innerWidth < 640 ? 2 : 0}
+            tick={({ x, y, payload }) => {
+              return (
+                <g transform={`translate(${x},${y + 10})`}>
+                  <text
+                    x={0}
+                    y={0}
+                    textAnchor="end"
+                    fontSize={window.innerWidth < 640 ? 10 : 12}
+                    transform="rotate(-25)"
+                  >
+                    {formatXAxis(payload.value)}
+                  </text>
+                </g>
+              );
+            }}
+          />
+          <YAxis />
+          <Tooltip
+            formatter={(value, name) => [formatEur(value, name === "regionPrice"), name === "regionPrice" ? `${region} mediaanhind €/m²` : "Eesti HPI"]}
+            labelFormatter={formatTooltipLabel}
+          />
+          <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: window.innerWidth < 640 ? 12 : 14 }} />
+          <Line type="monotone" dataKey="regionPrice" name={`${region} mediaanhind €/m²`} stroke="#1e3a8a" dot />
+          <Line type="monotone" dataKey="hpi" name="Eesti HPI" stroke="#16a34a" dot />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 

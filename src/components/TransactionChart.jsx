@@ -25,36 +25,39 @@ function TransactionChart({ data, region }) {
   const maxValue = Math.max(...fixedData.map(d => d.transaction_count), 0);
 
   return (
-    <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={fixedData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
-        <XAxis
-          dataKey="period"
-          interval={window.innerWidth < 640 ? 2 : 0}
-          tick={({ x, y, payload }) => {
-            return (
-              <g transform={`translate(${x},${y + 10})`}>
-                <text
-                  x={0}
-                  y={0}
-                  textAnchor="end"
-                  fontSize={window.innerWidth < 640 ? 10 : 12}
-                  transform="rotate(-25)"
-                >
-                  {formatPeriodLabel(payload.value)}
-                </text>
-              </g>
-            );
-          }}
-        />
-        <YAxis domain={[0, maxValue + 2]} />
-        <Tooltip
-          formatter={(value, name) => [value, name === "transaction_count" ? "Tehingute arv" : name]}
-          labelFormatter={formatPeriodLabel}
-        />
-        <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: window.innerWidth < 640 ? 12 : 14 }} />
-        <Bar dataKey="transaction_count" fill="#f97316" barSize={32} />
-      </BarChart>
-    </ResponsiveContainer>
+    <div>
+      <h2 className="text-xl font-semibold mb-2">Tehingute arv</h2>
+      <ResponsiveContainer width="100%" height={350}>
+        <BarChart data={fixedData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+          <XAxis
+            dataKey="period"
+            interval={window.innerWidth < 640 ? 2 : 0}
+            tick={({ x, y, payload }) => {
+              return (
+                <g transform={`translate(${x},${y + 10})`}>
+                  <text
+                    x={0}
+                    y={0}
+                    textAnchor="end"
+                    fontSize={window.innerWidth < 640 ? 10 : 12}
+                    transform="rotate(-25)"
+                  >
+                    {formatPeriodLabel(payload.value)}
+                  </text>
+                </g>
+              );
+            }}
+          />
+          <YAxis domain={[0, maxValue + 2]} />
+          <Tooltip
+            formatter={(value, name) => [value, "Tehingute arv"]}
+            labelFormatter={formatPeriodLabel}
+          />
+          <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: window.innerWidth < 640 ? 12 : 14 }} />
+          <Bar dataKey="transaction_count" name="Tehingute arv" fill="#f97316" barSize={32} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
 

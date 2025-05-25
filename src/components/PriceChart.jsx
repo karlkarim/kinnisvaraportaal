@@ -58,8 +58,9 @@ function PriceChart({ selectedRegion, year, months }) {
   };
 
   return (
-    <div className="mt-8">
-      <h2 className="text-xl font-semibold mb-2">Hinnagraafik – {selectedRegion}</h2>
+    <div>
+      <h2 className="text-xl font-semibold mb-1">Hinnagraafik – {selectedRegion}</h2>
+      <p className="text-sm text-neutral-600 mb-2">Näitab valitud piirkonna mediaan- ja keskmise hinna muutust ajas.</p>
       <ResponsiveContainer width="100%" height={350}>
         <LineChart data={stats} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
           <XAxis
@@ -91,6 +92,10 @@ function PriceChart({ selectedRegion, year, months }) {
           <Line type="monotone" dataKey="avg_price_per_m2" name="Keskmine hind €/m²" stroke="#16a34a" dot />
         </LineChart>
       </ResponsiveContainer>
+      <div className="mt-2 text-xs text-neutral-500">
+        <b>Mediaanhind</b> – väärtus, millest pooled tehingud on odavamad ja pooled kallimad.<br />
+        <b>Keskmine hind</b> – kõigi tehingute aritmeetiline keskmine hind.
+      </div>
     </div>
   );
 }

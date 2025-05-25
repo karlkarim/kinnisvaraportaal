@@ -222,27 +222,27 @@ function RegionOverview() {
           </motion.div>
         </div>
 
-        {/* Ehitushinnaindeksi trend */}
+        {/* Transaction Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
           className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
         >
-          <ChartModalWrapper title="Ehitushinnaindeksi trend">
-            <ConstructionIndexChart />
+          <ChartModalWrapper title="Tehingute statistika">
+            <TransactionChart data={transactionStats} region={details.region} />
           </ChartModalWrapper>
         </motion.div>
 
-        {/* Transaction Chart */}
+        {/* Ehitushinnaindeksi trend */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9 }}
           className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
         >
-          <ChartModalWrapper title="Tehingute statistika">
-            <TransactionChart data={transactionStats} region={details.region} />
+          <ChartModalWrapper title="Ehitushinnaindeksi trend">
+            <ConstructionIndexChart />
           </ChartModalWrapper>
         </motion.div>
 
