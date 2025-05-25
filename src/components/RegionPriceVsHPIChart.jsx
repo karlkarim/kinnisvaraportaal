@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import formatEur from "../utils/formatEur";
 
 const monthToQuarter = (month) => {
   if (["01", "02", "03"].includes(month)) return "I";
@@ -8,6 +9,17 @@ const monthToQuarter = (month) => {
   if (["10", "11", "12"].includes(month)) return "IV";
   return "";
 };
+
+const monthNamesShort = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
+const ChartWrapper = ({ children }) => (
+  <div className="overflow-x-auto">
+    <div className="min-w-[640px]">{children}</div>
+  </div>
+);
 
 const RegionPriceVsHPIChart = ({ region }) => {
   const [regionData, setRegionData] = useState([]);
@@ -44,20 +56,50 @@ const RegionPriceVsHPIChart = ({ region }) => {
 
   if (loading) return <div>Laen...</div>;
 
+  // X-telje kuupäevad kujule "01/24"
+  const formatXAxis = (period) => {
+    const [year, month] = period.split("-");
+    return `${month}/${year.slice(-2)}`;
+  };
+
+  // Tooltipi label "Jan 24"
+  const formatTooltipLabel = (period) => {
+    const [year, month] = period.split("-");
+    return `${monthNamesShort[parseInt(month, 10) - 1]} ${year.slice(-2)}`;
+  };
+
   return (
-    <div style={{ width: "100%", height: 400 }}>
-      <h3 className="text-xl font-bold mb-2">{region} mediaanhind vs HPI</h3>
-      <ResponsiveContainer>
-        <LineChart data={regionData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-          <XAxis dataKey="period" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="regionPrice" name={`${region} mediaanhind €/m²`} stroke="#8884d8" />
-          <Line type="monotone" dataKey="hpi" name="Eesti HPI" stroke="#82ca9d" />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height={400}>
+      <LineChart data={regionData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+        <XAxis
+          dataKey="period"
+          interval={window.innerWidth < 640 ? 2 : 0}
+          tick={({ x, y, payload }) => {
+            return (
+              <g transform={`translate(${x},${y + 10})`}>
+                <text
+                  x={0}
+                  y={0}
+                  textAnchor="end"
+                  fontSize={window.innerWidth < 640 ? 10 : 12}
+                  transform="rotate(-25)"
+                >
+                  {formatXAxis(payload.value)}
+                </text>
+              </g>
+            );
+          }}
+        />
+        <YAxis />
+        <Tooltip
+          formatter={(value, name) => [formatEur(value, name === "regionPrice"), name === "regionPrice" ? `${region} mediaanhind €/m²` : "Eesti HPI"]}
+          labelFormatter={formatTooltipLabel}
+        />
+        <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: window.innerWidth < 640 ? 12 : 14 }} />
+        <Line type="monotone" dataKey="regionPrice" name={`${region} mediaanhind €/m²`} stroke="#1e3a8a" dot />
+        <Line type="monotone" dataKey="hpi" name="Eesti HPI" stroke="#16a34a" dot />
+      </LineChart>
+    </ResponsiveContainer>
   );
 };
 

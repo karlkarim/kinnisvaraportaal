@@ -6,7 +6,6 @@ import RegionOverview from "./pages/RegionOverview";
 import RegionSelect from "./pages/RegionSelect";
 import PriceStats from "./pages/PriceStats";
 import HPIPage from "./pages/HPIPage";
-import ConstructionIndexChart from "./components/ConstructionIndexChart";
 // import PriceChartPage from "./pages/PriceChartPage"; // ✅ uus
 
 function App() {
@@ -21,7 +20,6 @@ function App() {
           <Route path="/hpi" element={<HPIPage />} />
         </Route>
       </Routes>
-      <ConstructionIndexChart />
     </Router>
   );
 }

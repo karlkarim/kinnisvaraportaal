@@ -2,13 +2,33 @@ import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { FaTools } from "react-icons/fa";
 
-// Tooltipi sisu
+const monthNamesShort = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
+const formatXAxis = (period) => {
+  if (!period) return "";
+  const [year, quarter] = period.split("-");
+  // Kui kvartal on number, teisenda rooma numbriks
+  const quarterMap = { "I": "01", "II": "04", "III": "07", "IV": "10", "1": "01", "2": "04", "3": "07", "4": "10" };
+  const month = quarterMap[quarter] || quarter;
+  return `${month}/${year.slice(-2)}`;
+};
+
+const formatTooltipLabel = (period) => {
+  if (!period) return "";
+  const [year, quarter] = period.split("-");
+  // Näita "Q1 24" vms
+  return `Q${quarter.replace(/[^0-9]/g, "") || quarter} ${year.slice(-2)}`;
+};
+
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     const d = payload[0].payload;
     return (
       <div className="bg-white p-3 rounded shadow border border-gray-200">
-        <div className="font-semibold mb-1">{d.year} {d.quarter}</div>
+        <div className="font-semibold mb-1">{formatTooltipLabel(d.period)}</div>
         <div>Indeks: <span className="font-bold">{d.index_value}</span></div>
       </div>
     );
@@ -29,7 +49,6 @@ const ConstructionIndexChart = () => {
         return res.json();
       })
       .then((rows) => {
-        // Muudame andmed graafiku jaoks sobivaks
         setData(
           rows.map((row) => ({
             year: row.year,
@@ -57,10 +76,26 @@ const ConstructionIndexChart = () => {
       </div>
       <ResponsiveContainer width="100%" height={350}>
         <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-          <XAxis dataKey="period" />
+          <XAxis
+            dataKey="period"
+            interval={window.innerWidth < 640 ? 2 : 0}
+            tick={({ x, y, payload }) => (
+              <g transform={`translate(${x},${y + 10})`}>
+                <text
+                  x={0}
+                  y={0}
+                  textAnchor="end"
+                  fontSize={window.innerWidth < 640 ? 10 : 12}
+                  transform="rotate(-25)"
+                >
+                  {formatXAxis(payload.value)}
+                </text>
+              </g>
+            )}
+          />
           <YAxis />
           <Tooltip content={<CustomTooltip />} />
-          <Legend />
+          <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: window.innerWidth < 640 ? 12 : 14 }} />
           <Line type="monotone" dataKey="index_value" name="Ehitushinnaindeks" stroke="#f59e42" dot={false} />
         </LineChart>
       </ResponsiveContainer>

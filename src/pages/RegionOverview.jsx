@@ -9,6 +9,8 @@ import BuildingStats from "../components/BuildingStats";
 import RegionSelect from "./RegionSelect";
 import RegionPriceVsHPIChart from "../components/RegionPriceVsHPIChart";
 import ConstructionIndexChart from "../components/ConstructionIndexChart";
+import formatEur from "../utils/formatEur";
+import ChartModalWrapper from "../components/ChartModalWrapper";
 
 const allMonths = [
   "Jaanuar", "Veebruar", "Märts", "Aprill", "Mai", "Juuni",
@@ -170,27 +172,27 @@ function RegionOverview() {
               </div>
               <h3 className="text-base sm:text-lg font-semibold text-neutral-800">Kokku summa</h3>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-neutral-900">{details.total_sum_eur.toLocaleString()} €</p>
+            <p className="text-xl sm:text-2xl font-bold text-neutral-900">{formatEur(details.total_sum_eur)}</p>
             <p className="text-sm text-neutral-500 mt-1">Kogu tehingute summa</p>
           </motion.div>
         </div>
 
         {/* Map and Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {/* Asukoht kaardil - täislaiuses */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 col-span-1 lg:col-span-2"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 col-span-1 sm:col-span-2 w-full"
           >
-            <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+            <h2 className="text-base xs:text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
               <div className="bg-teal-100 p-2 rounded-lg">
                 <FaMapMarkerAlt className="text-teal-600" />
               </div>
               Asukoht kaardil
             </h2>
-            <div className="h-[300px] sm:h-[400px]">
+            <div className="h-[220px] xs:h-[320px] sm:h-[400px] w-full">
               <MapView regionName={details.region} />
             </div>
           </motion.div>
@@ -200,17 +202,11 @@ function RegionOverview() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
           >
-            <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
-              <div className="bg-teal-100 p-2 rounded-lg">
-                <FaChartBar className="text-teal-600" />
-              </div>
-              Hinnadünaamika
-            </h2>
-            <div className="h-[300px] sm:h-[400px]">
+            <ChartModalWrapper title={`Hinnagraafik – ${details.region}`}>
               <PriceChart selectedRegion={details.region} year={year} months={months} />
-            </div>
+            </ChartModalWrapper>
           </motion.div>
 
           {/* Mediaanhind vs HPI */}
@@ -218,17 +214,11 @@ function RegionOverview() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
           >
-            <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
-              <div className="bg-teal-100 p-2 rounded-lg">
-                <FaChartBar className="text-teal-600" />
-              </div>
-              {details.region} mediaanhind vs HPI
-            </h2>
-            <div className="h-[300px] sm:h-[400px]">
+            <ChartModalWrapper title={`${details.region} mediaanhind vs HPI`}>
               <RegionPriceVsHPIChart region={details.region} />
-            </div>
+            </ChartModalWrapper>
           </motion.div>
         </div>
 
@@ -237,9 +227,11 @@ function RegionOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+          className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
         >
-          <ConstructionIndexChart />
+          <ChartModalWrapper title="Ehitushinnaindeksi trend">
+            <ConstructionIndexChart />
+          </ChartModalWrapper>
         </motion.div>
 
         {/* Transaction Chart */}
@@ -247,17 +239,11 @@ function RegionOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9 }}
-          className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+          className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 w-full"
         >
-          <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
-            <div className="bg-teal-100 p-2 rounded-lg">
-              <FaCalendarAlt className="text-teal-600" />
-            </div>
-            Tehingute statistika
-          </h2>
-          <div className="h-[300px] sm:h-[400px]">
+          <ChartModalWrapper title="Tehingute statistika">
             <TransactionChart data={transactionStats} region={details.region} />
-          </div>
+          </ChartModalWrapper>
         </motion.div>
 
         {/* Additional Info Section */}

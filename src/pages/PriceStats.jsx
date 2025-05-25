@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PriceChart from "../components/PriceChart"; // vajadusel kohanda teed
+import formatEur from "../utils/formatEur";
 
 function PriceStats() {
   const [stats, setStats] = useState([]);
@@ -45,9 +46,9 @@ function PriceStats() {
               <td className="border px-2 py-1">{row.size_group}</td>
               <td className="border px-2 py-1 text-right">{row.transaction_count}</td>
               <td className="border px-2 py-1 text-right">{row.avg_area_m2}</td>
-              <td className="border px-2 py-1 text-right">{row.median_price_per_m2}</td>
-              <td className="border px-2 py-1 text-right">{row.avg_price_per_m2}</td>
-              <td className="border px-2 py-1 text-right">{row.total_sum_eur}</td>
+              <td className="border px-2 py-1 text-right">{formatEur(row.median_price_per_m2, true)}</td>
+              <td className="border px-2 py-1 text-right">{formatEur(row.avg_price_per_m2, true)}</td>
+              <td className="border px-2 py-1 text-right">{formatEur(row.total_sum_eur)}</td>
             </tr>
           ))}
         </tbody>
