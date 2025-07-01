@@ -6,6 +6,7 @@ import RegionOverview from "./pages/RegionOverview";
 import RegionSelect from "./pages/RegionSelect";
 import PriceStats from "./pages/PriceStats";
 import HPIPage from "./pages/HPIPage";
+import MaakondList from "./pages/MaakondList";
 // import PriceChartPage from "./pages/PriceChartPage"; // ✅ uus
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="/maakond" element={<MaakondList />} />
           <Route path="/piirkond" element={<RegionSelect />} />
           <Route path="/piirkond/:name" element={<RegionOverview />} />
           <Route path="/hinnad" element={<PriceStats />} />
