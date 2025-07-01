@@ -47,7 +47,7 @@ async function fetchAndStoreHPI() {
   for (const row of data.data) {
     const [year, quarter, type] = row.key;
     const value = row.values[0];
-    if (type === '1') {
+    if (type === '1' && value !== '..' && !isNaN(Number(value))) {
       inserts.push([year, quarter, value]);
     }
   }
