@@ -53,6 +53,7 @@ function Layout() {
           <nav className="hidden md:flex gap-4">
             <Link to="/" className={navLinkClass("/")}>Avaleht</Link>
             <Link to="/piirkond" className={navLinkClass("/piirkond")}>Piirkonna ülevaade</Link>
+            <Link to="/maakond" className={navLinkClass("/maakond")}>Maakonna andmed</Link>
           </nav>
         </div>
         {/* Mobile menu dropdown */}
@@ -72,6 +73,13 @@ function Layout() {
                 onClick={() => setMenuOpen(false)}
               >
                 Piirkonna ülevaade
+              </Link>
+              <Link
+                to="/maakond"
+                className={navLinkClass("/maakond")}
+                onClick={() => setMenuOpen(false)}
+              >
+                Maakonna andmed
               </Link>
             </div>
           </nav>
